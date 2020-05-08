@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>HOUSEHOLD OBJECT DETECTION</title>
+  <!-- Bootstrap core CSS -->
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom fonts for this template -->
+  <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="static/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet">
+  {{ dropzone.load() }}
+  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px; margin-top: 10px; margin-bottom: 10px') }}
+</head>
+
+<body style="background-color: bg-light;">
+
+  <!-- Navigation --> 
+  <nav class="navbar navbar-light bg-light static-top" style="background: url('static/img/bg-masthead.jpg'); background-repeat: no-repeat; background-position: center center;">
+    <div class="container">
+      <a class="navbar-brand style" style="color: white; font-weight: bolder; font-size: 26px;" href="#">KITCHEN OBJECTS DETECTOR</a>
+    </div>
+  </nav>
+
+  <!-- Masthead -->
+  <header class="masthead text-white text-center" style="background: url('static/img/household.jpg'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 mx-auto">
+          <h1 class="mb-5">GET THE KITCHEN ESSENTIALS YOU'VE ALWAYS WANTED</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Icons Grid -->
+  <section class="features-icons bg-light text-center" style="padding-top: 0rem; padding-bottom: 0rem; margin-left: 3%;">
+      <div class="row" style="margin: 1%;">
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex" id="image_up">
+              <i class="fas fa-images m-auto text-primary"></i>
+            </div>
+            <h3 style="font-size: x-large;">UPLOAD IMAGE</h3>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex">
+              <i class="fas fa-camera m-auto text-primary" href="#"></i>
+            </div>
+            <h3 style="font-size: x-large;">TAKE PICTURE</h3>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+          <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+            <div class="features-icons-icon d-flex" id="video_up">
+              <i class="fas fa-film m-auto text-primary" href="#"></i>
+            </div>
+            <h3 style="font-size: x-large;">UPLOAD VIDEO</h3>
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
+          <div class="col-md-6">
+            <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+              <div class="features-icons-icon d-flex" id="video_stream">
+                <i class="fas fa-video m-auto text-primary" href="#"></i>
+              </div>
+              <h3 style="font-size: x-large;">TAKE VIDEO</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <div id ="icon_options">
+    <section class="call-to-action text-white text-center" style="padding-top: 1.5rem; padding-bottom: 0rem; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 mx-auto">
+            <h2 class="mb-4" id="text_for_icon"></h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+    <div id="dropzone">
+      {{ dropzone.create(action_view='index') }}
+    </div>
+  </div>
+
+  <br>
+  <div style="text-align: center;">
+  <p><a class="btn btn-primary btn-lg" role="button" style="background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">SHOW IMAGES</a></p>
+  </div>
+  <p>
+    <!-- <ul>
+      {% for file_url in file_urls %}
+      <li><img style="height: 150px" src="{{ file_url }}"></li>
+      {% endfor %}
+    </ul> -->
+
+  <div id="recorderr">
+    <section class="call-to-action text-white text-center"
+      style="padding-top: 1.5rem; padding-bottom: 0rem; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 mx-auto" id="video_stream_text">
+            <h2 class="mb-4">STREAM VIDEO</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+    <div class="container">
+      <div class="row" style="margin-left: 3%;">
+        <div id="recorder">
+          <div class="col-md-1 custom-panel float-left">
+            <button id="record" style="font-size: 58px; ">
+              <i class="fas fa-play-circle m-auto text-primary"></i>
+            </button>
+            <div>   </div>
+            <button id="stop" style="font-size: 58px; ">
+              <i class="fas fa-stop-circle m-auto text-primary"></i>
+            </button>
+            <div>   </div>
+            <!-- <button style="font-size: 58px; "> -->
+              <!-- <i class="fas fa-download m-auto text-primary"> -->
+            <a id="download"></a>
+            <script type="text/javascript" src="{{ url_for('static', filename='./js/recorder.js') }}"></script>
+              <!-- </i> -->
+            <!-- </button> -->
+          </div>
+          <div class="col-md-10 custom-panel float-left">
+            <img id="video" src="{{ url_for('video_viewer') }}"
+              style='border: 2px dashed #0087F7; margin: 2%; max-height: 500px; margin-top: 10px; margin-bottom: 10px; width: 90%;'>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row">
+        <img id="video" src="{{ url_for('video_viewer') }}"
+          style='border: 2px dashed #0087F7; margin: 2%; max-height: 450px; margin-top: 10px; margin-bottom: 10px; width: 90%;'>
+      </div> -->
+    </div>
+  </div>
+
+  <br>
+  <div id="detections">
+    <section class="call-to-action text-white text-center"
+      style="padding-top: 1.5rem; padding-bottom: 0rem; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 mx-auto">
+            <h2 class="mb-4" id="text_for_icon"> DETECTIONS</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="table" style="text-align: center;">
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+  </div>
+
+  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    <div class="input-group mb-3">
+      <select class="custom-select" id="selDataset"
+        style="max-width:100%; margin-left: 10%; padding: 8px; color: #8e979f; outline: none;">
+        <option selected>SELECT DETECTED OBJECT</option>
+      </select>
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="selDataset"
+          style="background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed; color: white;">SEARCH</label>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <!-- Footer -->
+  <footer class="footer" style="text-align: center; background-color: #bcc8d6; padding-top: 0rem; padding-bottom: 0rem;">
+    <strong>
+      <p class="text-muted small mb-lg-0">&copy; TOLU OMOTUNDE - REMCO MOOIJ</p>
+      <p class="text-muted small mb-lg-0">HOUSEHOLD OBJECT DETECTION WEBSITE 2020</p>
+      <p class="text-muted small mb-lg-0">ALL RIGHTS RESERVED.</p>
+    </strong>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <!-- <script src="static/js/app.js"></script> -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="static/js/app.js" type="text/javascript"></script>
+  <script src="static/js/recorder.js" type="text/javascript"></script>
+</body>
+
+</html>

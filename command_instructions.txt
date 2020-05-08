@@ -1,0 +1,34 @@
+Custom Dataset with Google Open Images Dataset
+-----------------------------------------------
+
+OIDv4_ToolKit
+--------------
+
+In git bash go to OIDv4_ToolKit repository and run command:
+    python main.py downloader --classes Pen Airplane --type_csv train --limit 2000
+
+    --classes: what classes you want to download
+    --type_csv: train or test (train or test folder will be created in OIDv4_ToolKit/OID/Dataset)
+    --limit: how many images you want to download of each class
+
+    folders of each class with images will end up in OIDv4_ToolKit/OID/Dataset/train
+
+
+To convert labels and annotations from OIDv4_ToolKit to format that YoloV3 takes in for its training:
+
+    python convert_annotations.py
+
+
+Build Object Detection APIs Using TenserFlow and Flask
+-------------------------------------------------------
+
+1. download weights (pretrained or custom)
+    /Object-Detection_API/weights
+2. convert weights into a tenserflow model (.tf files)
+    In Object-Detection_API run command:
+        python load_weights.py
+3. use this tenserflow model for our endpoints
+        Update link to weights file in app.py
+
+        Run command:
+        python app.py
