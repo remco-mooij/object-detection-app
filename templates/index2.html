@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>OBJECT DETECTOR</title>
+  <!-- Bootstrap core CSS -->
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom fonts for this template -->
+  <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="static/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet"
+    type="text/css">
+  <!-- Custom styles for this template -->
+  <link href="static/css/style.css" rel="stylesheet">
+  {{ dropzone.load() }}
+  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px; margin-top: 10px; margin-bottom: 10px') }}
+  <!-- <div id="detResponse">
+    {{ response[0] }}
+  </div> -->
+</head>
+
+<body style="background-color: bg-light;">
+  <div style="display: none;">
+    <script>
+        var parsed = "{{response[0]|safe}}";
+        parsed = JSON.parse(parsed.replace(/'/g, '"'));
+        var scrapeddata = "{{response[1]|safe}}";
+        scrapeddata = JSON.parse(scrapeddata.replace(/'/g, '"'));
+        // scrapeddata = JSON.parse(scrapeddata.replace(/'/g, '"'));
+        console.log(scrapeddata);
+        console.log(parsed);
+      //var parsed = JSON.stringify("{{response[0]|safe}}");
+      // var detectionResponse = '{{ response[0] }}';
+      // var scrapedData = '{{ response[1] }}'
+    </script>
+  </div>
+  <!-- Navigation -->
+  <nav class="navbar navbar-light bg-light static-top"
+    style="background: url('static/img/bg-masthead.jpg'); background-repeat: no-repeat; background-position: center center;">
+    <div class="container text-center">
+      <a class="navbar-brand style" style="color: white; font-weight: bolder; font-size: 26px;" href="#"><i
+          class="fas fa-home fa-spin fa-fw"></i>OBJECT DETECTOR</a>
+    </div>
+  </nav>
+
+  <!-- Masthead -->
+  <header class="masthead text-white text-center"
+    style="background: url('static/img/household.jpg'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12 mx-auto">
+          <h1 class="mb-5">GET THE HOUSEHOLD ESSENTIALS YOU'VE ALWAYS WANTED</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Icons Grid -->
+  <section class="features-icons bg-light text-center"
+    style="padding-top: 0rem; padding-bottom: 0rem; margin-left: 3%;">
+    <div class="row" style="margin: 1%;">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex" id="image_up">
+            <i class="fas fa-images m-auto text-primary"></i>
+          </div>
+          <h3 style="font-size: x-large;">UPLOAD IMAGE</h3>
+        </div>
+      </div>
+      <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+          <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+            <div class="features-icons-icon d-flex">
+              <i class="fas fa-camera m-auto text-primary" href="#"></i>
+            </div>
+            <h3 style="font-size: x-large;">TAKE PICTURE</h3>
+          </div>
+        </div> -->
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+          <div class="features-icons-icon d-flex" id="video_up">
+            <i class="fas fa-film m-auto text-primary" href="#"></i>
+          </div>
+          <h3 style="font-size: x-large;">UPLOAD VIDEO</h3>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex" id="video_stream">
+            <i class="fas fa-video m-auto text-primary" href="#"></i>
+          </div>
+          <h3 style="font-size: x-large;">TAKE VIDEO</h3>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+    <!-- <p><a class="btn btn-primary btn-lg" id="get_result" role="button"
+        style="color: white; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed; cursor: pointer;">SHOW
+        RESULTS</a></p> -->
+  </div>
+  <div id="imgResponse" style="display: block;">
+    <!-- {{ img_filenames }} -->
+    <!-- <img src="static/detections/detection.jpg"> -->
+  </div>
+
+  <!-- <ul>
+    {% for file_url in file_urls %}
+    <li><img style="height: 150px" src="{{ file_url }}"></li>
+    {% endfor %}
+  </ul> -->
+  <br>
+  <div id="detections">
+    <section class="call-to-action text-white text-center"
+      style="padding-top: 1.5rem; padding-bottom: 0rem; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 mx-auto">
+            <h2 class="mb-4" id="text_for_icon"> DETECTIONS</h2>
+          </div>
+          <br>
+        </div>
+      </div>
+    </section>
+    <br>
+    <div class="container center" style="filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3));">
+      <div class="row">
+        <div class="col-md-12">
+          <div id="table">
+          </div>
+        </div>
+        <!-- <br> -->
+        <!-- <div class="col-xl-12 mx-auto>
+            <img src="static/detections/detection1.jpg" class="center" style="filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3));">
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div id="get_store_data">
+    <section class="call-to-action text-white text-center"
+      style="padding-top: 1.5rem; padding-bottom: 0rem; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed;">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-12 mx-auto">
+            <h2 class="mb-4" id="text_for_icon"> SCRAPE DATA FOR OBJECT</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+    <br>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 float-left">
+            <div class="form-group float-right" style="filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3));">
+              <select class="form-control center" id="selDatasetOne"
+                style="max-width:100%; text-align: center; padding: 8px; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; cursor: pointer; background-size: cover; background-attachment: fixed; color: white; outline: none; display: inline-block;">
+                <option selected class="custom-option text-center">SELECT OBJECT</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 float-left text-center" ;>
+            <!-- <div id="walmart" class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="cursor: pointer; display: inline-block;">
+                <img src="https://img.icons8.com/color/48/000000/walmart.png" />
+                <h3 style="font-size: large; color: #506784;">WALMART</h3>
+              </div>
+              <div id="amazon" class="col-lg-3 col-md-3 col-sm-6 col-xs-6" style="cursor: pointer; display: inline-block;">
+                <img src="https://img.icons8.com/color/48/000000/amazon.png" />
+                <h3 style="font-size: large; color: #506784;">AMAZON</h3>
+              </div> -->
+            <div class="form-group float-left" style="filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3));">
+              <select class="form-control center" id="selDatasetTwo"
+                style="max-width:100%; text-align: center; padding: 8px; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; cursor: pointer; background-size: cover; background-attachment: fixed; color: white; outline: none; display: inline-block;">
+                <option selected class="custom-option text-center">SORT BY</option>
+                <option value="best_match">BEST MATCH</option>
+                <option value="best_sellers">BEST SELLERS</option>
+                <option value="high_to_low">PRICE: HIGH TO LOW</option>
+                <option value="low_to_high">PRICE: LOW TO HIGH</option>
+                <option value="highest_rating">HIGHEST RATINGS</option>
+                <option value="newest_arrival">NEWEST ARRIVALS</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+    </div>
+    <br>
+    <br>
+    <div class="col-md-12">
+      <div id="table-area">
+        <table id="my-table" class="table table-striped"
+          style="border: medium solid #B8C4D2; filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3)); background-color: #BCC8D6; border: 3; width: 100%; table-layout: auto; font-size:13px; text-align: center;">
+          <thead style="background-color: #677F9F; color: white; font: bold; cursor: pointer; font-size: large;">
+            <tr>
+              <th>IMAGE</th>
+              <th>PRODUCT NAME</th>
+              <th>PRICE</th>
+              <th>RATING</th>
+              <th>NUMBER OF REVIEWS</th>
+              <th>DELIVERY INFO</th>
+            </tr>
+          </thead>
+          <tbody style="font: bold; cursor: pointer; font-size: medium; max-height: 100px;"></tbody>
+        </table>
+        <br>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Footer -->
+  <footer class="footer"
+    style="text-align: center; background-color: #bcc8d6; padding-top: 0rem; padding-bottom: 0rem;">
+    <strong>
+      <p class="text-muted small mb-lg-0">&copy; TOLU OMOTUNDE - REMCO MOOIJ</p>
+      <p class="text-muted small mb-lg-0">HOUSEHOLD OBJECT DETECTION WEBSITE 2020</p>
+      <p class="text-muted small mb-lg-0">ALL RIGHTS RESERVED.</p>
+    </strong>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <!-- <script src="static/js/app.js"></script> -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="static/js/app2.js" type="text/javascript"></script>
+  <!-- <script src="static/js/recorder.js" type="text/javascript"></script> -->
+</body>
+
+</html>
