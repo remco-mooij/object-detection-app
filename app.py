@@ -4,7 +4,10 @@ from werkzeug.utils import secure_filename
 from flask_dropzone import Dropzone
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 from camera import VideoCamera
-
+from PIL import Image
+import io
+import base64
+import get_cnn_data as get
 import time
 from absl import app, logging
 import cv2
@@ -17,6 +20,13 @@ from yolov3_tf2.dataset import transform_images, load_tfrecord_dataset
 from yolov3_tf2.utils import draw_outputs
 from flask import Flask, request, Response, jsonify, send_from_directory, abort
 import os
+
+allowable_items = ['bicycle', 'backpack', 'umbrella', 'handbag', 'tie', 'suitcase',
+                   'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racketbottle', 'wine glass', 'cup',
+                   'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange', 'broccoli', 'carrot',
+                   'hot dog', 'pizza', 'donut', 'cakechair', 'sofa', 'pottedplant', 'bed', 'diningtable', 'toilet',
+                   'tvmonitor', 'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster',
+                   'sink', 'refrigerator', 'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush']
 
 # customize your API through the following parameters
 classes_path = './data/labels/coco.names'
@@ -44,6 +54,7 @@ print('classes loaded')
 
 APP_ROOT =os.path.dirname(os.path.abspath(__file__))
 upload = os.getcwd() + '/uploads/'
+detection = os.getcwd() + '/detections/'
 
 app = Flask(__name__)
 dropzone = Dropzone(app)
@@ -74,6 +85,8 @@ patch_request_class(app)  # set maximum file size, default is 16MB
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+	# filelist = [f for f in os.listdir(detection)]
+	# [os.remove(os.path.join(detection, f)) for f in filelist]
 	# set session for image results
 	if "file_urls" not in session:
 		session['file_urls'] = []
@@ -174,35 +187,103 @@ def get_detections():
 def get_image():
 	raw_images =[]
 	images = os.listdir(os.getcwd() + '/uploads')
+	image_names = []
 	for image in images:
-		image_file = os.getcwd() + '/uploads/' + image
-		img_raw = tf.image.decode_image(
-			open(image_file, 'rb').read(), channels=3)
-		img = tf.expand_dims(img_raw, 0)
-		img = transform_images(img, size)
-	
-	t1 = time.time()
-	boxes, scores, classes, nums = yolo(img)
-	t2 = time.time()
-	print('time: {}'.format(t2 - t1))
+		for i in ["jpg","jpeg","png","bmp"]:
+			if image.endswith(i):
+					image_names.append(image)
+					image_file = os.getcwd() + '/uploads/' + image
+					img_raw = tf.image.decode_image(open(image_file, 'rb').read(), channels=3)
+					raw_images.append(img_raw)
+	num = 0
+	print(image_file)
+	# create list for final response
+	response = []
 
-	print('detections')
-	for i in range(nums[0]):
-		print('\t{}, {}, {}'.format(class_names[int(classes[0][i])], np.array(scores[0][i]), np.array(boxes[0][i])))
-	
-	img = cv2.cvtColor(img_raw.numpy(), cv2.COLOR_RGB2BGR)
-	img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
-	cv2.imwrite(output_path + 'detection.jpg', img)
-	print('out saved to: {}'.format(output_path + 'detection.jpg'))
+	for j in range(len(raw_images)):
+			# create list of responses for current image
+			responses = []
+			raw_img = raw_images[j]
+			num+=1
+			img = tf.expand_dims(raw_img, 0)
+			img = transform_images(img, size)
 
-	# prepare image for response
-	_, img_encoded = cv2.imencode('.png', img)
-	response = img_encoded.tostring()
+			t1 = time.time()
+			boxes, scores, classes, nums = yolo(img)
+			t2 = time.time()
+			print('time: {}'.format(t2 - t1))
 
+			print('detections:')
+			for i in range(nums[0]):
+					print('\t{}, {}, {}'.format(class_names[int(classes[0][i])],
+																					np.array(scores[0][i]),
+																					np.array(boxes[0][i])))
+					responses.append({
+							"class": class_names[int(classes[0][i])],
+							"confidence": float("{0:.2f}".format(np.array(scores[0][i])*100))
+					})
+			response.append({
+					"image": image_names[j],
+					"detections": responses
+			})
+			img = cv2.cvtColor(raw_img.numpy(), cv2.COLOR_RGB2BGR)
+			img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
+			cv2.imwrite(output_path + 'detection' + str(num) + '.jpg', img)
+			print('output saved to: {}'.format(output_path + 'detection' + str(num) + '.jpg'))
+
+	new_list = []
+	for i in response[0]['detections']:
+			new_list.append(list(i.values())[0])
+	new_list = [i for i in new_list if i in allowable_items]
+	b = {}
+	for i in new_list:
+			b[i] = get.get_walmart_data(i, 1)
+	#remove temporary images
+	# for name in image_names:
+	#     os.remove(name)
+	filelist = [f for f in os.listdir(upload)]
+	[os.remove(os.path.join(upload, f)) for f in filelist]
 	try:
-		return Response(response=response, status=200, mimetype='image/png')
+			return (response[0],b)
 	except FileNotFoundError:
-		abort(404)
+			return " "
+
+# API that returns image with detections on it
+# @app.route('/image', methods= ['POST'])
+def get_image():
+	if request.method == 'POST':
+		raw_images =[]
+		images = os.listdir(os.getcwd() + '/uploads')
+		for image in images:
+			for i in ["jpg", "jpeg", "png", "bmp"]:
+				if image.endswith(i):
+					image_file = os.getcwd() + '/uploads/' + image
+					img_raw = tf.image.decode_image(open(image_file, 'rb').read(), channels=3)
+					img = tf.expand_dims(img_raw, 0)
+					img = transform_images(img, size)
+		
+		t1 = time.time()
+		boxes, scores, classes, nums = yolo(img)
+		t2 = time.time()
+		print('time: {}'.format(t2 - t1))
+
+		print('detections')
+		for i in range(nums[0]):
+			print('\t{}, {}, {}'.format(class_names[int(classes[0][i])], np.array(scores[0][i]), np.array(boxes[0][i])))
+		
+		img = cv2.cvtColor(img_raw.numpy(), cv2.COLOR_RGB2BGR)
+		img = draw_outputs(img, (boxes, scores, classes, nums), class_names)
+		cv2.imwrite(output_path + 'detection.jpg', img)
+		print('out saved to: {}'.format(output_path + 'detection.jpg'))
+
+		# prepare image for response
+		_, img_encoded = cv2.imencode('.png', img)
+		response = img_encoded.tostring()
+
+		try:
+			return Response(response=response, status=200, mimetype='image/png')
+		except FileNotFoundError:
+			abort(404)
 
 def get_filenames():
 	from os import listdir

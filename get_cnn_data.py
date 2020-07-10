@@ -68,7 +68,11 @@ def get_amazon_data(query, no_of_pages):
             }
         }
 
+<<<<<<< HEAD
         executable_path = {"executable_path": "chromedriver.exe"}
+=======
+        executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
         browser = Browser("chrome", **executable_path, headless=True)
         for j in list(range(5)):
             for i in list(range(no_of_pages)):
@@ -215,7 +219,11 @@ def get_walmart_data(query, no_of_pages):
             }
         }
 
+<<<<<<< HEAD
         executable_path = {"executable_path": "chromedriver.exe"}
+=======
+        executable_path = {"executable_path": "/usr/local/bin/chromedriver"}
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
         browser = Browser("chrome", **executable_path, headless=True)
         for i in list(range(1, no_of_pages+1)):
             url = f"https://www.walmart.com/search/?page={i}&query={query}"

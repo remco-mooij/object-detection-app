@@ -22,12 +22,19 @@
   <link href="static/css/style.css" rel="stylesheet">
   {{ dropzone.load() }}
   {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px; margin-top: 10px; margin-bottom: 10px') }}
+<<<<<<< HEAD
 
+=======
+  <!-- <div id="detResponse">
+    {{ response[0] }}
+  </div> -->
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
 </head>
 
 <body style="background-color: bg-light;">
   <div style="display: none;">
     <script>
+<<<<<<< HEAD
       //var parsed = JSON.stringify("{{response[0]|safe}}");
       var parsed = "{{response[0]|safe}}";
       console.log(parsed);
@@ -36,6 +43,20 @@
       scrapeddata = JSON.parse(scrapeddata.replace(/'/g, '"'));
       console.log(scrapeddata);
       console.log(parsed);
+=======
+      try {
+        var parsed = "{{response[0]|safe}}";
+        parsed = JSON.parse(parsed.replace(/'/g, '"'));
+        var scrapeddata = "{{response[1]|safe}}";
+        scrapeddata = JSON.parse(scrapeddata.replace(/'/g, '"'));
+        console.log(scrapeddata);
+        console.log(parsed);
+        }
+        catch (err) {
+          console.log("not_yet");
+        }
+      //var parsed = JSON.stringify("{{response[0]|safe}}");
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
       // var detectionResponse = '{{ response[0] }}';
       // var scrapedData = '{{ response[1] }}'
     </script>
@@ -120,6 +141,7 @@
   
   <br>
   <div id="show_results" style="text-align: center; filter: drop-shadow(1em 1em 1em rgba(0, 0, 0, 0.3))">
+<<<<<<< HEAD
     <p><a class="btn btn-primary btn-lg" role="button"
         style="color: white; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed; cursor: pointer;">SHOW
         RESULTS</a></p>
@@ -134,6 +156,23 @@
     <li><img style="height: 150px" src="{{ file_url }}"></li>
     {% endfor %}
   </ul>
+=======
+    <form action="/show_results" method="post">
+      <input class="btn btn-primary btn-lg" type="submit" id="get_result" name="" value="SHOW
+        RESULTS"
+        style="color: white; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed; cursor: pointer;">
+    </form>
+    <!-- <p><a class="btn btn-primary btn-lg" id="get_result" role="button"
+        style="color: white; background: url('static/img/bg-masthead.JPG'); background-repeat: no-repeat; background-position: center top; background-size: cover; background-attachment: fixed; cursor: pointer;">SHOW
+        RESULTS</a></p> -->
+  </div>
+  
+  <!-- <ul>
+    {% for file_url in file_urls %}
+    <li><img style="height: 150px" src="{{ file_url }}"></li>
+    {% endfor %}
+  </ul> -->
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
 
   <div id="recorderr">
     <section class="call-to-action text-white text-center"
@@ -172,6 +211,7 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </div>
   </div>
   <br>
@@ -249,6 +289,10 @@
       </div>
       <br>
     </div>
+=======
+    </div>
+  </div>
+>>>>>>> 880ecef79657dbbe4b34299978c1c187fc669db9
   <br>
   <br>
       <div class="col-md-12">

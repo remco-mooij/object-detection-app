@@ -1,6 +1,7 @@
 var buttonRecord = document.getElementById("record");
 var buttonStop = document.getElementById("stop");
 var button_show_detected_image = document.getElementById("show_detected_image");
+// var detect = document.getElementById("show_results");
 
 buttonStop.disabled = true;
 
@@ -73,4 +74,11 @@ buttonStop.onclick = function () {
 //   xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 //   xhr.send(JSON.stringify({ status: "true" }));
 // };
-
+try {
+  get_result.onclick = function () {
+    show_results();
+  }
+}
+catch {
+  console.log("yippie");
+};
